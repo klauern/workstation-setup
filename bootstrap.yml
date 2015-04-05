@@ -1,0 +1,59 @@
+---
+# file: roles/personal-server/tasks/bootstrap.yml
+- name: Update Apt Cache
+  apt: update_cache=yes
+- name: Upgrade packages
+  apt: upgrade=full
+- name: install base packages
+  apt:
+    name="{{ item }}"
+    state=present
+  sudo: yes
+  with_items:
+  - git
+  - exuberant-ctags
+  - vim-gtk
+  - tmux
+  - watch
+  - curl
+  - silversearcher-ag
+  - pass
+  - apt-file
+  - python-pip
+  - nginx
+- name: Remove Default enabled site from Nginx
+  file: path=/etc/nginx/sites-enabled/default state=absent
+- name: git config user.email
+  shell: git config --global {{ item }}
+  with_items:
+  - user.email "klauer@gmail.com"
+  - user.name "Nick Klauer"
+  - push.default simple
+  - alias.ds "diff --staged"
+  - alias.st "status -sb"
+  - alias.fup "log --since '1 day ago' --oneline --author <YOUR_EMAIL>"
+  - alias.ls "log --pretty=format:%C(yellow)%h %C(blue)%ad%C(red)%d %C(reset)%s%C(green) [%cn]--decorate --date=short"
+  - alias.lsv "log --pretty=format:%C(yellow)%h %C(blue)%ad%C(red)%d %C(reset)%s%C(green) [%cn]--decorate --date=short --numstat"
+  - alias.r "reset"
+  - alias.r1 "reset HEAD^"
+  - alias.r2 "reset HEAD^^"
+  - alias.rh "reset --hard"
+  - alias.rh1 "reset HEAD^ --hard"
+  - alias.rh2 "reset HEAD^^ --hard"
+  - alias.cp "cherry-pick"
+  - alias.cl "clone"
+  - alias.ci "commit"
+  - alias.co "checkout"
+  - alias.br "branch"
+  - alias.diff "diff --word-diff"
+  - alias.dc "diff --cached"
+  - alias.sl "stash list"
+  - alias.sa "stash apply"
+  - alias.ss "stash save"
+  - alias.l "log"
+  - alias.lh "log --graph"
+  - alias.la "!git lh --date-order --all 2> /dev/null"
+  - alias.lb "log --graph --simplify-by-decoration"
+  - alias.lba "!git lb --all"
+  - alias.h "!git --no-pager log --graph -n 15"
+  - alias.a "!git --no-pager la -n 15"

@@ -1,0 +1,10 @@
+---
+# file: roles/personal-server/tasks/minecraft.yml
+- name: install minecraft
+  hosts: localhost
+  sudo: yes
+  roles:
+  - role: meatballhat.minecraft
+  vars:
+    minecraft_java_opts: "-Xmx512M -Xms256M -XX:+UseConcMarkSweepGC -XX:+CMSIncrementalPacing -XX:ParallelGCThreads=2"
+    minecraft_ops: ["ZyLoGaN"]

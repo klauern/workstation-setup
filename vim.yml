@@ -1,0 +1,33 @@
+---
+- name: install vim
+  sudo: yes
+  apt:
+    name="{{ item }}"
+    state=present
+  with_items:
+  - vim-gtk
+- name: clone dot-vim repo
+  git:
+    repo="https://github.com/klauern/dot-vim.git"
+    dest="~/.vim"
+- name: link .vimrc
+  file: path=~/.vimrc
+        src=~/.vimrc/vimrc
+        state=link
+        force=yes
+- name: create vim temp directories
+  file: path="~/.vim/tmp/{{ item }}"
+        state=directory
+  with_items:
+  - backup
+  - swap
+  - undo
+- name: clone Vundle
+  git:
+    repo="https://github.com/gmarik/Vundle.vim"
+    dest="~/.vim/bundle/Vundle.vim"
+- name: install plugins
+  shell: yes '' | vim +PluginInstall +qall
+- name: update plugins already there
+  shell: yes '' | vim +PluginUpdate +qall
+

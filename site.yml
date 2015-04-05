@@ -1,0 +1,9 @@
+---
+# file: site.yml
+- hosts: localhost
+  tasks:
+  - { include: bootstrap.yml, sudo: yes }
+  - { include: vim.yml, sudo: no }
+
+- include: golang.yml
+#- include: minecraft.yml # doesn't work without upstart, would need to fork or make our own
