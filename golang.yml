@@ -1,6 +1,11 @@
 ---
 # tasks file for roles/golang
 - hosts: localhost
+  tasks:
+  - name: install golang role
+    shell: ansible-galaxy install joshualund.golang --force
+
+- hosts: localhost
   sudo: yes
   roles:
   #- meatballhat.minecraft
