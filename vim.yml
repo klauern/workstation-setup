@@ -22,12 +22,5 @@
   - backup
   - swap
   - undo
-- name: clone Vundle
-  git:
-    repo="https://github.com/gmarik/Vundle.vim"
-    dest="~/.vim/bundle/Vundle.vim"
-- name: install plugins
-  shell: yes '' | vim +PluginInstall +qall
-- name: update plugins already there
-  shell: yes '' | vim +PluginUpdate +qall
-
+- name: install / update Vim plugins
+  shell: yes '' | vim +PlugUpdate +qall
