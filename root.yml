@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+  vars_prompt:
+  - name: user_pass
+    prompt: "what password to set it to?"
+    private: yes
+  vars:
+    salt: whyNotSaltIt
+  tasks:
+  - name: create password
+    shell: python -c 'import crypt; print crypt.crypt("{{ user_pass }}", "{{salt}}")'
+    register: password
+  - name: create klauer user
+    user: name=klauer comment="Nick Klauer" shell=/bin/bash generate_ssh_key=yes ssh_key_bits=2048 ssh_key_file=.ssh/id_rsa password={{ password.stdout }} update_password=always
+  - name: add klauer to sudoers
+    shell: gpasswd -a klauer sudo
+  - name: disable root login
+    lineinfile: dest=/etc/ssh/sshd_config state=present regexp="^PermitRootLogin yes" line="PermitRootLogin no" backrefs=yes
+  - name: reload ssh
+    service: name=ssh state=restarted
+
